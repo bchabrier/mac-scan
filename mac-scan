@@ -1,0 +1,54 @@
+#!/bin/sh
+
+if [ $# != 1 ]
+then
+    echo "Usage: $0 <mac_address>"
+    exit 2
+fi
+
+mac=$1
+
+submac=$(echo $mac | awk -F: '{print $4":"$5":"$6}')
+macre=$(echo $submac | awk '{
+  printf "/[0-9a-fA-F][0-9a-fA-F]:[0-9a-fA-F][0-9a-fA-F]:[0-9a-fA-F][0-9a-fA-F]:"
+    for (i = 1; i <= length; i++) {
+      c = substr($0, i, 1)
+      if (match(c, /[a-zA-Z]/)) {
+        printf "[%s%s]", tolower(c), toupper(c)
+      } else {
+        printf c
+      }
+    }
+  printf "/"
+}'
+     )
+
+# find ip address
+ips=$(
+    (
+	arp -n | awk '$3 ~ '$macre' { print $1 }'
+	curl -s http://mafreebox.freebox.fr/pub/fbx_info.txt | awk '$1 ~ '$macre' { print $2 }'
+    ) | sort -u
+   )
+
+if [ "$ips" != "" ]
+then
+    for ip in $ips
+    do
+	ping -n -W 1 -c 1 $ip > /dev/null &
+    done
+
+    response=$(sudo arp-scan -r 5 $ips | grep -e "$macre" | grep -v DUP:)
+
+    if [ "$response" != "" ]
+    then
+	echo $response | awk '{print $2 "responded" $1 $3}'
+    else
+	echo $mac "noresponse" $ips 
+    fi
+    
+    wait
+fi
+
+
+
