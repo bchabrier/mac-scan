@@ -1,6 +1,6 @@
 
 @test "missing argument should return exit code 2" {
-    run ../mac-scan
+    run sh ../mac-scan
     [ $status = 2 ]
     first_word=$(echo $output | cut -d' ' -f1)
     echo $first_word
@@ -8,7 +8,7 @@
 }
 
 @test "2 arguments should return exit code 2" {
-    run ../mac-scan "mac1" "mac2"
+    run sh ../mac-scan "mac1" "mac2"
     [ $status = 2 ]
     first_word=$(echo $output | cut -d' ' -f1)
     echo $first_word
@@ -16,7 +16,7 @@
 }
 
 @test "1 argument should be accepted" {
-    run ../mac-scan "a mac address"
+    run sh ../mac-scan "a mac address"
     [ $status != 2 ]
 }
 
