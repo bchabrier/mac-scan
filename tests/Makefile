@@ -1,8 +1,8 @@
 all : tests
 
 tests : 
-	rm -f .timestamp
-	@make watch
+	-rm -f .timestamp
+	@make .timestamp
 
 clean :
 	rm -fr bats
@@ -13,4 +13,4 @@ watch:
 
 .timestamp: tests.bats Makefile ../mac-scan
 	-bats tests.bats
-	touch .timestamp
+	-touch .timestamp
