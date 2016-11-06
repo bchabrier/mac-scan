@@ -6,5 +6,5 @@ before_install:
 install:
     - sudo apt-get install -qq bc
 script:
-    - cd tests; bats ./test.bats
+    - cd tests; make tests
   
