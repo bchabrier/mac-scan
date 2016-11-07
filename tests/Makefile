@@ -12,5 +12,6 @@ watch:
 	while true; do make -s .timestamp; sleep 1; done
 
 .timestamp: tests.bats Makefile ../mac-scan
+	-rm -fr coverage
 	-bats tests.bats
 	-touch .timestamp
