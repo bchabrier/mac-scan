@@ -32,7 +32,7 @@ if [ "$ips" != "" ]
 then
     for ip in $ips
     do
-	ping -n -w 1 -c 1 $ip > /dev/null &
+	ping -n -c 1 $ip > /dev/null &
     done
 
     response=$(sudo arp-scan -r 5 $ips | grep -e "$macre" | grep -v DUP:)
