@@ -10,7 +10,7 @@ mac=$1
 
 submac=$(echo $mac | awk -F: '{print $4":"$5":"$6}')
 macre=$(echo $submac | awk '{
-  printf "/[0-9a-fA-F][0-9a-fA-F]:[0-9a-fA-F][0-9a-fA-F]:[0-9a-fA-F][0-9a-fA-F]:"
+  printf "[0-9a-fA-F][0-9a-fA-F]:[0-9a-fA-F][0-9a-fA-F]:[0-9a-fA-F][0-9a-fA-F]:"
     for (i = 1; i <= length; i++) {
       c = substr($0, i, 1)
       if (match(c, /[a-zA-Z]/)) {
@@ -19,17 +19,14 @@ macre=$(echo $submac | awk '{
         printf c
       }
     }
-  printf "/"
 }'
      )
 
 # find ip address
-ips=$(
-    (
-	arp -n | awk '$3 ~ '$macre' { print $1 }'
-	curl -s http://mafreebox.freebox.fr/pub/fbx_info.txt | awk '$1 ~ '$macre' { print $2 }'
-    ) | sort -u
-   )
+ips=$( (
+	 arp -n | awk '$3 ~ /'$macre'/ { print $1 }'
+	 curl -s http://mafreebox.freebox.fr/pub/fbx_info.txt | awk '$1 ~ /'$macre'/ { print $2 }'
+     ) | sort -u)
 
 if [ "$ips" != "" ]
 then
@@ -42,7 +39,12 @@ then
 
     if [ "$response" != "" ]
     then
-	echo $response | awk '{print $2 "responded" $1 $3}'
+	echo $response | awk '{
+             printf("%s responded %s", $2, $1)
+             for (i = 3; i <= NF; i++)
+                 printf(" %s", $i)
+             printf("\n")
+        }'
     else
 	echo $mac "noresponse" $ips 
     fi
