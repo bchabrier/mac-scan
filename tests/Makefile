@@ -18,7 +18,7 @@ watch:
 
 /usr/local/bin/kcov :
 	wget https://github.com/SimonKagstrom/kcov/archive/v31.tar.gz
-	tar xvf kcov-31.tar.gz
+	tar xvf v31.tar.gz
 	cd kcov-31; rm -fr build
 	cd kcov-31; mkdir build
 	cd kcov-31/build; cmake ..
