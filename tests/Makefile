@@ -17,7 +17,7 @@ watch:
 	-touch .timestamp
 
 /usr/local/bin/kcov :
-	sudo apt-get install libelf-dev
+	sudo apt-get install -qq libelf-dev libdw-dev
 	wget https://github.com/SimonKagstrom/kcov/archive/v31.tar.gz
 	tar xvf v31.tar.gz
 	cd kcov-31; rm -fr build
