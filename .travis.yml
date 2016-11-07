@@ -4,7 +4,7 @@ before_install:
     - sudo apt-get update -qq
     - sudo apt-get install -qq bats
 install:
-    - man ping
+    - man ping > ping.txt; cat ping.txt
 script:
     - cd tests; make tests
   
