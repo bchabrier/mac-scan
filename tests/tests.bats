@@ -74,8 +74,32 @@ EOF
 ' > arp; chmod uog+x arp
     do_run ../mac-scan 00:00:00:00:00:00
     [ "$status" = 0 ]
-    [ "$(echo $output | grep '0 responded')" == "" ]
-    [ "$(echo $output | grep '192.168.0.5')" == "" ]
+    [ "$output" = "00:00:00:00:00:00 noresponse" ]
+}
+
+@test "a mac address found in arp -n should give a response" {
+    # find a known ip address that is accessible
+    local mac
+    local ip
+    local tmpfile=/tmp/arp-n.$$.txt
+    arp -n | awk 'NR>1' > $tmpfile
+    while read line
+    do
+	ip=$(echo "$line" | awk '{print $1}')
+	if ping -w 1 $ip
+	then
+	    mac=$(echo "$line" | awk '$3 ~ /^[0-9a-fA-F:]+$/ {print $3}')
+	    echo "Will mac-scan $mac ($ip), which responds to ping."
+	    break
+	fi
+    done < $tmpfile
+    rm -f $tmpfile
+
+    do_run ../mac-scan "$mac"
+    [ "$status" = 0 ]
+    local words123=$(echo $output | awk '{print $1, $2, $3}')
+    echo words123=$words123
+    [ "$words123" = "$mac responded $ip" ]
 }
 
 teardown ()
