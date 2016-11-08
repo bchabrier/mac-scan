@@ -2,6 +2,7 @@ do_run ()
 {
     # run with kcov for code coverage
     # include . in PATH in order to find mocked commands
+    export PATH
     PATH=.:$PATH hash -r
     ls -l
     which arp-scan || true
