@@ -46,8 +46,8 @@ Address                  HWtype  HWaddress           Flags Mask            Iface
 192.168.0.5              ether   03:12:7b:b3:71:40   C                     wlan0
 EOF
 ' > arp; chmod uog+x arp
-    # mock arp-scan
-    echo 'echo 1 responded' > arp-scan; chmod uog+x arp-scan; ls -l
+    # mock sudo arp-scan
+    echo 'if [ "$1" = "arp-scan" ] then echo 1 responded; else /usr/bin/sudo $@' > sudo; chmod uog+x sudo; ls -l
     do_run ../mac-scan 03:12:7b:b3:71:40
     [ $status = 0 ]
     [ "$output" = "03:12:7b:b3:71:40 noresponse 192.168.0.5" ]
@@ -61,8 +61,8 @@ Address                  HWtype  HWaddress           Flags Mask            Iface
 192.168.0.5              ether   03:12:7b:b3:71:40   C                     wlan0
 EOF
 ' > arp; chmod uog+x arp
-    # mock arp-scan
-    echo 'echo 1 responded' > arp-scan; chmod uog+x arp-scan
+    # mock sudo arp-scan
+    echo 'if [ "$1" = "arp-scan" ] then echo 1 responded; else /usr/bin/sudo $@' > sudo; chmod uog+x sudo; ls -l
     do_run ../mac-scan 03:12:7b:B3:71:40
     [ $status = 0 ]
     [ "$output" = "03:12:7b:B3:71:40 noresponse 192.168.0.5" ]
@@ -109,5 +109,5 @@ EOF
 
 teardown ()
 {
-    rm -f arp arp-scan
+    rm -f arp sudo
 }
