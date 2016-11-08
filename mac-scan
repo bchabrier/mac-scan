@@ -50,6 +50,8 @@ then
     fi
     
     wait
+else
+    echo $mac "noresponse"
 fi
 
 
