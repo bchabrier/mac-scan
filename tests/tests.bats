@@ -3,6 +3,7 @@ do_run ()
     # run with kcov for code coverage
     # include . in PATH in order to find mocked commands
     PATH=.:$PATH hash -r
+    ls -l
     which arp-scan || true
     which arp || true
     PATH=.:$PATH run kcov --coveralls-id=$TRAVIS_JOB_ID --exclude-pattern=mac-scan/tests coverage "$@"
@@ -45,7 +46,7 @@ Address                  HWtype  HWaddress           Flags Mask            Iface
 EOF
 ' > arp; chmod uog+x arp
     # mock arp-scan
-    echo 'echo 1 responded' > arp-scan; chmod uog+x arp-scan
+    echo 'echo 1 responded' > arp-scan; chmod uog+x arp-scan; ls -l
     do_run ../mac-scan 03:12:7b:b3:71:40
     [ $status = 0 ]
     [ "$output" = "03:12:7b:b3:71:40 noresponse 192.168.0.5" ]
