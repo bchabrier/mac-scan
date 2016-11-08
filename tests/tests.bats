@@ -2,6 +2,9 @@ do_run ()
 {
     # run with kcov for code coverage
     # include . in PATH in order to find mocked commands
+    PATH=.:$PATH hash -r
+    which arp-scan
+    which arp
     PATH=.:$PATH run kcov --coveralls-id=$TRAVIS_JOB_ID --exclude-pattern=mac-scan/tests coverage "$@"
 
     # then run for the test 
