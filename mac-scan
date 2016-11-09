@@ -2,7 +2,7 @@
 
 if [ $# != 1 ]
 then
-    echo "Usage: $0 <mac_address>"
+    echo "Usage: `basename $0` <mac_address>"
     exit 2
 fi
 
