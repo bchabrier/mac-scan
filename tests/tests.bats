@@ -85,13 +85,14 @@ EOF
     local ip
     local tmpfile=/tmp/arp-n.$$.txt
     arp -n | awk 'NR>1' > $tmpfile
+    mac="no-mac-address-found"
     while read line
     do
 	ip=$(echo "$line" | awk '{print $1}')
-	if ping -w 1 $ip
+	if sudo arp-scan $ip #ping -w 1 $ip
 	then
 	    mac=$(echo "$line" | awk '$3 ~ /^[0-9a-fA-F:]+$/ {print $3}')
-	    echo "Will mac-scan $mac ($ip), which responds to ping."
+	    echo "Will mac-scan $mac ($ip), which responds to arp-scan."
 	    break
 	fi
     done < $tmpfile
