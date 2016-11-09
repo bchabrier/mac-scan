@@ -25,7 +25,8 @@ macre=$(echo $submac | awk '{
 # find ip address
 ips=$( (
 	 arp -n | awk '$3 ~ /'$macre'/ { print $1 }'
-	 curl -s http://mafreebox.freebox.fr/pub/fbx_info.txt | awk '$1 ~ /'$macre'/ { print $2 }'
+	 curl --max-time 5 -s http://mafreebox.freebox.fr/pub/fbx_info.txt | \
+	     awk '$1 ~ /'$macre'/ { print $2 }'
      ) | sort -u)
 
 if [ "$ips" != "" ]
