@@ -2,8 +2,6 @@ do_run ()
 {
     # run with kcov for code coverage
     # include . in PATH in order to find mocked commands
-    netstat -r
-    sudo arp-scan 10.128.0.1
     PATH=.:$PATH run kcov --coveralls-id=$TRAVIS_JOB_ID --exclude-pattern=mac-scan/tests coverage "$@"
 
     # then run for the test 
@@ -44,7 +42,7 @@ Address                  HWtype  HWaddress           Flags Mask            Iface
 EOF
 ' > arp; chmod uog+x arp
     # mock sudo arp-scan
-    echo 'if [ "$1" = "arp-scan" ]; then echo; else /usr/bin/sudo $@; fi' > sudo; chmod uog+x sudo; ls -l
+    echo 'if [ "$1" = "arp-scan" ]; then echo; else /usr/bin/sudo $@; fi' > sudo; chmod uog+x sudo
     do_run ../mac-scan 03:12:7b:b3:71:40
     [ $status = 0 ]
     [ "$output" = "03:12:7b:b3:71:40 noresponse 192.168.0.5" ]
@@ -59,7 +57,7 @@ Address                  HWtype  HWaddress           Flags Mask            Iface
 EOF
 ' > arp; chmod uog+x arp
     # mock sudo arp-scan
-    echo 'if [ "$1" = "arp-scan" ]; then echo; else /usr/bin/sudo $@; fi' > sudo; chmod uog+x sudo; ls -l
+    echo 'if [ "$1" = "arp-scan" ]; then echo; else /usr/bin/sudo $@; fi' > sudo; chmod uog+x sudo
     do_run ../mac-scan 03:12:7b:B3:71:40
     [ $status = 0 ]
     [ "$output" = "03:12:7b:B3:71:40 noresponse 192.168.0.5" ]
