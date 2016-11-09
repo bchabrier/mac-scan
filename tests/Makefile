@@ -17,7 +17,22 @@ watch:
 	@echo bats tests.bats
 	bats tests.bats
 
-/usr/local/bin/kcov :
+/usr/local/bin/kcov : kcov-master/build/src/kcov
+
+
+kcov-master/build/src/kcov:
+	sudo apt-get install -qq libelf-dev libdw-dev
+	rm -f kcov-master.zip
+	wget https://codeload.github.com/SimonKagstrom/kcov/zip/master -O kcov-master.zip
+	unzip kcov-master.zip
+	cd kcov-master; chmod uog+x `find . -name '*.py'`
+	cd kcov-master; rm -fr build
+	cd kcov-master; mkdir build
+	cd kcov-master/build; cmake ..
+	cd kcov-master/build; make
+	cd kcov-master/build; sudo make install
+
+kcov-31/build/src/kcov:
 	sudo apt-get install -qq libelf-dev libdw-dev
 	wget https://github.com/SimonKagstrom/kcov/archive/v31.tar.gz
 	tar xvf v31.tar.gz
