@@ -1,20 +1,21 @@
 all : tests
 
 tests : 
-	-rm -f .timestamp
-	@make .timestamp
+	@rm -f .timestamp
+	@make -s .timestamp
 
 clean :
 	rm -fr bats
 	rm .timestamp
 
 watch:
-	while true; do make -s .timestamp; sleep 1; done
+	while true; do make -s -i .timestamp; sleep 1; done
 
 .timestamp: /usr/local/bin/kcov tests.bats Makefile ../mac-scan
-	-rm -fr coverage
-	-bats tests.bats
-	-touch .timestamp
+	@touch .timestamp
+	@rm -fr coverage
+	@echo bats -p tests.bats
+	bats tests.bats
 
 /usr/local/bin/kcov :
 	sudo apt-get install -qq libelf-dev libdw-dev
