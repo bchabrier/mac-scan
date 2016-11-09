@@ -14,7 +14,7 @@ watch:
 .timestamp: /usr/local/bin/kcov tests.bats Makefile ../mac-scan
 	@touch .timestamp
 	@rm -fr coverage
-	@echo bats -p tests.bats
+	@echo bats tests.bats
 	bats tests.bats
 
 /usr/local/bin/kcov :
